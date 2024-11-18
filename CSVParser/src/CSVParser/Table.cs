@@ -11,11 +11,13 @@ public class Table(
     {
         var lines = csvText.Split('\n', StringSplitOptions.TrimEntries);
         
-        var header = lines.First().Split(columnDelimiter, StringSplitOptions.TrimEntries)
+        var header = lines
+            .First()
+            .Split(columnDelimiter, StringSplitOptions.TrimEntries)
             .Where(it => it != "").ToArray();
         var rows = lines.Skip(1).Select(line =>
             {
-                Dictionary<string, string> dict = new Dictionary<string, string>();
+                var dict = new Dictionary<string, string>();
                 var splitLine = line.Split(columnDelimiter, StringSplitOptions.TrimEntries);
                     for (var i = 0; i < splitLine.Length; i++)
                     {
@@ -26,7 +28,8 @@ public class Table(
                     }
                 return dict;
             }
-        ).Where((dict) => dict.Count != 0).ToList();
+        ).Where((dict) => dict.Count != 0)
+        .ToList();
 
         return new Table(header, rows);
     }
