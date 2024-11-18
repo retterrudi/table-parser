@@ -21,6 +21,7 @@ public class Table(
                 var splitLine = line.Split(columnDelimiter, StringSplitOptions.TrimEntries);
                     for (var i = 0; i < splitLine.Length; i++)
                     {
+                        // TODO: Refactor - empty fields should be possible but no empty line
                         if (splitLine[i] != "") 
                         {
                             dict.Add(header[i], splitLine[i]);
@@ -34,4 +35,29 @@ public class Table(
         return new Table(header, rows);
     }
 
+}
+
+
+public static class HtmlConverter
+{
+    // TODO: Validate that the template(s) are compatible with the table data
+    // TODO: Tests
+    static string FillTemplate(Table table, string fileTemplate, string rowsTemplate)
+    {
+        string rows = "";
+        
+        foreach (var row in table.rows)
+        {
+            var filledRowsTemplate = rowsTemplate;
+            foreach (var column in table.header)
+            {
+                filledRowsTemplate = filledRowsTemplate.Replace($"{{{{{column}}}}}", row[column]);
+            }
+
+            rows += filledRowsTemplate;
+        }
+
+        return fileTemplate.Replace("{{{{rows}}}}", rows);
+    }
+    
 }
