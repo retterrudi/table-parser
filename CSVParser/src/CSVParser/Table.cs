@@ -19,14 +19,17 @@ public class Table(
             {
                 var dict = new Dictionary<string, string>();
                 var splitLine = line.Split(columnDelimiter, StringSplitOptions.TrimEntries);
-                    for (var i = 0; i < splitLine.Length; i++)
-                    {
-                        // TODO: Refactor - empty fields should be possible but no empty line
-                        if (splitLine[i] != "") 
-                        {
-                            dict.Add(header[i], splitLine[i]);
-                        }
-                    }
+                
+                if (splitLine.All(column => column == ""))
+                {
+                    return dict;
+                }
+                
+                for (var i = 0; i < splitLine.Length; i++)
+                {
+                    dict.Add(header[i], splitLine[i]);
+                }
+
                 return dict;
             }
         ).Where((dict) => dict.Count != 0)

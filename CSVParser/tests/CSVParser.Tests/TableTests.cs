@@ -1,4 +1,3 @@
-using System.Data;
 using CSVParser.CSVParser;
 using Xunit;
 
@@ -27,17 +26,21 @@ public class TableTests
     [Fact]
     public void TableFromCsv_MultipleRows_CreateCorrectTable()
     {
-        const string csvText = "Name,Age,City\nAlice,30 ,London\nBob,25,Paris\nCharlie,35,Berlin";
+        const string csvText = "Name,Age,City\nAlice,30 ,London\nBob,25,Paris\nCharlie,35,Berlin\n,40,New York\nJake,,Seattle\nMike,20,";
         const char delimiter = ',';
 
         var table = Table.TableFromCsv(csvText, delimiter);
         
         Assert.Equal(new[] { "Name", "Age", "City" }, table.header);
-        Assert.Equal(3 ,table.rows.Count);
+        Assert.Equal(6 ,table.rows.Count);
         Assert.Equal("London", table.rows[0]["City"]);
         Assert.Equal("30", table.rows[0]["Age"]);
         Assert.Equal("Paris", table.rows[1]["City"]);
         Assert.Equal("Charlie", table.rows[2]["Name"]);
+        Assert.Equal("", table.rows[3]["Name"]);
+        Assert.Equal("", table.rows[4]["Age"]);
+        Assert.Equal("", table.rows[5]["City"]);
+        
     }
     
     [Fact]
@@ -64,4 +67,18 @@ public class TableTests
         Assert.NotEmpty(table.header);
         Assert.Empty(table.rows);
     }
+    
+    [Fact]
+    public void TableFromCsv_CsvContainsEmptyRow_EmptyRowGetsRemoved()
+    {
+        const string csvText = "Name,Age,City\nAlice,30 ,London\n,,\nCharlie,35,Berlin";
+        const char delimiter = ',';
+
+        var table = Table.TableFromCsv(csvText, delimiter);
+        
+        Assert.Equal(2, table.rows.Count);
+        Assert.Equal("Alice", table.rows[0]["Name"]);
+        Assert.Equal("Charlie", table.rows[1]["Name"]);
+    }
+    
 }
