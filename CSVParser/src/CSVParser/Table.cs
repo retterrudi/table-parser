@@ -45,9 +45,9 @@ public static class HtmlConverter
 {
     // TODO: Validate that the template(s) are compatible with the table data
     // TODO: Tests
-    static string FillTemplate(Table table, string fileTemplate, string rowsTemplate)
+    internal static string FillTemplate(Table table, string fileTemplate, string rowsTemplate)
     {
-        string rows = "";
+        var rows = "";
         
         foreach (var row in table.rows)
         {
@@ -60,7 +60,7 @@ public static class HtmlConverter
             rows += filledRowsTemplate;
         }
 
-        return fileTemplate.Replace("{{{{rows}}}}", rows);
+        return fileTemplate.Replace("{{rows}}", rows);
     }
     
 }
