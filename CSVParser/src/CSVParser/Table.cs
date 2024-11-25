@@ -18,7 +18,8 @@ public class Table(
         var rows = lines.Skip(1).Select(line =>
             {
                 var dict = new Dictionary<string, string>();
-                var splitLine = line.Split(columnDelimiter, StringSplitOptions.TrimEntries);
+                var splitLine = 
+                    line.Split(columnDelimiter, StringSplitOptions.TrimEntries);
                 
                 if (splitLine.All(column => column == ""))
                 {
@@ -43,9 +44,11 @@ public class Table(
 
 public static class HtmlConverter
 {
-    // TODO: Validate that the template(s) are compatible with the table data
     // TODO: Tests
-    internal static string FillTemplate(Table table, string fileTemplate, string rowsTemplate)
+    internal static string FillTemplate(
+        Table table, 
+        string fileTemplate, 
+        string rowsTemplate)
     {
         var rows = "";
         
@@ -54,7 +57,8 @@ public static class HtmlConverter
             var filledRowsTemplate = rowsTemplate;
             foreach (var column in table.header)
             {
-                filledRowsTemplate = filledRowsTemplate.Replace($"{{{{{column}}}}}", row[column]);
+                filledRowsTemplate = 
+                    filledRowsTemplate.Replace($"{{{{{column}}}}}", row[column]);
             }
 
             rows += filledRowsTemplate;
